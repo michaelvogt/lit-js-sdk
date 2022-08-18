@@ -8,7 +8,6 @@ import {
 import { toUtf8Bytes } from "@ethersproject/strings";
 import { hexlify } from "@ethersproject/bytes";
 import { getAddress } from "@ethersproject/address";
-import WalletConnectProvider from "@walletconnect/ethereum-provider";
 import LitConnectModal from "lit-connect-modal";
 import { SiweMessage } from "lit-siwe";
 
@@ -60,14 +59,6 @@ export async function connectWeb3({ chainId = 1 } = {}) {
   }
 
   const providerOptions = {
-    walletconnect: {
-      package: WalletConnectProvider, // required
-      options: {
-        // infuraId: "cd614bfa5c2f4703b7ab0ec0547d9f81",
-        rpc: rpcUrls,
-        chainId,
-      },
-    },
   };
 
   log("getting provider via lit connect modal");
@@ -193,7 +184,7 @@ export async function checkAndSignEVMAuthMessage({
     selectedChain
   );
   if (chainId !== selectedChain.chainId && switchChain) {
-    if (web3.provider instanceof WalletConnectProvider) {
+    if (web3.provider) {
       // this chain switching won't work.  alert the user that they need to switch chains manually
       throwError({
         message: `Incorrect network selected.  Please switch to the ${chain} network in your wallet and try again.`,
